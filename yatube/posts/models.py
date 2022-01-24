@@ -103,65 +103,65 @@ class Follow(models.Model):
 class InfoUser(models.Model):
     user = models.ForeignKey(
         User,
-        on_delete= models.CASCADE,
-        related_name= 'user_info'
+        on_delete=models.CASCADE,
+        related_name='user_info'
     )
-    first_name= models.CharField(
-        max_length= 50,
-        null= False,
-        verbose_name= 'Имя',
-        help_text= 'Введите имя.',
-        default= 'Аноним'
+    first_name = models.CharField(
+        max_length=50,
+        null=False,
+        verbose_name='Имя',
+        help_text='Введите имя.',
+        default='Аноним'
     )
     last_name = models.CharField(
-        max_length= 50,
-        null= False,
-        verbose_name= 'Фамилия',
-        help_text= 'Введите фамилию.',
-        default= 'Анонимов'
+        max_length=50,
+        null=False,
+        verbose_name='Фамилия',
+        help_text='Введите фамилию.',
+        default='Анонимов'
     )
     experience = models.CharField(
-        max_length= 10,
-        null= False,
-        verbose_name= 'Стаж работы',
-        help_text= 'Введите свой стаж.',
-        default= '0'
+        max_length=10,
+        null=False,
+        verbose_name='Стаж работы',
+        help_text='Введите свой стаж.',
+        default='0'
     )
     year_of_release = models.CharField(
-        max_length= 10,
-        null= False,
-        verbose_name= 'Год выпуска',
-        help_text= 'Введите год выпуска.',
-        default= '1812'
+        max_length=10,
+        null=False,
+        verbose_name='Год выпуска',
+        help_text='Введите год выпуска.',
+        default='1812'
     )
     city = models.CharField(
-        max_length= 10,
-        null= False,
-        verbose_name= 'Город проживания',
-        help_text= 'Введите свой город.',
-        default= 'Забугоровск'
+        max_length=10,
+        null=False,
+        verbose_name='Город проживания',
+        help_text='Введите свой город.',
+        default='Забугоровск'
     )
     kogorta = models.CharField(
-        max_length= 30,
-        null= False,
-        verbose_name= 'Когорта',
-        help_text= 'Введите свою когорту.',
-        default= '0'
+        max_length=30,
+        null=False,
+        verbose_name='Когорта',
+        help_text='Введите свою когорту.',
+        default='0'
     )
     image = models.ImageField(
         'Изображение',
-        upload_to= 'user_profile/',
-        blank= True
+        upload_to='user_profile/',
+        blank=True
     )
     information = models.TextField(
         verbose_name='Краткая информация',
-        default= 'Я просто посмотреть зашёл.'
+        default='Я просто посмотреть зашёл.'
     )
 
 
 class SearchPost(models.Model):
     text = models.CharField(
-        max_length= 50,
-        verbose_name= 'Поиск',
-        help_text= 'Введите что-нужно',
+        max_length=50,
+        verbose_name='Поиск',
+        help_text='Введите что-нужно',
     )
