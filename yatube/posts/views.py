@@ -246,6 +246,4 @@ def search_post_info(request):
                     'replace_buttom': replace_buttom,
                 }
             )
-    return render(request, template, {'form': form})    
-
-
+    return render(request, template, {'form': form})

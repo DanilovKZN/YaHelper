@@ -7,8 +7,7 @@ from .models import Comment, Post, InfoUser, SearchPost
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ('text', 'group', 'image')              # ДЛЯ 5 СПРИНТА
-        # fields = ('text', 'group')
+        fields = ('text', 'group', 'image')
         labels = {
             'text': 'Текст',
             'group': 'Группа',
@@ -33,7 +32,7 @@ class PostForm(ModelForm):
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        #fields = ('text', 'image')
+        # fields = ('text', 'image') # Комментарии с картинками
         fields = ('text',)
         labels = {
             'text': 'Текст',
@@ -63,4 +62,4 @@ class InfoUserForm(ModelForm):
 class SearchPostForm(ModelForm):
     class Meta:
         model = SearchPost
-        fields = ('text',)       
+        fields = ('text',)
