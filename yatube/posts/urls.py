@@ -50,7 +50,7 @@ urlpatterns = [
     path('follow/', views.follow_index, name='follow_index'),
     path(
         'profile/<str:username>/follow/',
-        views.profile_follow, 
+        views.profile_follow,
         name='profile_follow'
     ),
     path(
@@ -65,7 +65,7 @@ urlpatterns = [
     ),
     path(
         'info_user/<str:username>/edit/',
-        views.edit_info_user, 
+        views.edit_info_user,
         name='page_user_edit'
     ),
     path(

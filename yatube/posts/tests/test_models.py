@@ -33,7 +33,7 @@ class PostModelTest(TestCase):
         """Проверяем, что у модели 'post' корректно работает __str__."""
         self.assertEqual(
             str(self.post),
-            #self.post.text[:15],
+            # self.post.text[:15],
             self.post.text,
             'Вывод не сходится с условием.'
         )

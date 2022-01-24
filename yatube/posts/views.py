@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 
 from .forms import PostForm, CommentForm, InfoUserForm, SearchPostForm
 from .models import Comment, Follow, Group, Post, InfoUser, User
@@ -182,6 +182,7 @@ def profile_follow(request, username):
         )
     return redirect('posts:profile', post_author.username)
 
+
 @login_required
 def profile_unfollow(request, username):
     good_bay_man = get_object_or_404(
@@ -226,9 +227,9 @@ def edit_info_user(request, username):
     return redirect(unsuccess_url, username)
 
 
+# Ремонтировать
 def search_post_info(request):
     template = 'posts/search_post.html'
-    template_result = 'posts/search_result.html'
     form = SearchPostForm(request.POST or None)
     replace_buttom = False
     if request.method == 'POST':

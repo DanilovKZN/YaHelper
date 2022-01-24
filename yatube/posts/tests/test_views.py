@@ -81,7 +81,7 @@ class PostPagesTests(TestCase):
         шаблонов для авторизированного пользователя"""
         urls_templates = {
             reverse('posts:post_create'): 'posts/create_post.html',
-            #reverse('posts:index'): 'posts/index.html',
+            reverse('posts:index'): 'posts/index.html',
             reverse(
                 'posts:group_list',
                 kwargs={'slug': self.group.slug}
@@ -145,7 +145,7 @@ class PostPagesTests(TestCase):
         Последний пост является первым в объекте пагинатора.
         Обход идет по index, group_posts, profile."""
         urls_for_testing = [
-            #reverse('posts:index'),
+            reverse('posts:index'),
             reverse(
                 'posts:group_list',
                 kwargs={'slug': self.group_second.slug}
@@ -399,7 +399,7 @@ class PostPagesTests(TestCase):
             Comment.objects.count(),
             'Количество комментариев не изменилось'
         )
-        
+
     # Тестирование кеша
     def test_cache_index(self):
         """Проверяем работает ли кеш,
@@ -435,14 +435,14 @@ class PostPagesTests(TestCase):
 
     # Тестирование подписки/отписки
     def test_follow_and_unfollow(self):
-        """Проверяем работоспособность подписки 
+        """Проверяем работоспособность подписки
         и отписки авторизированного пользователя."""
         # Подписка
         self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={
-                    'username':self.user_new_author.username
+                    'username': self.user_new_author.username
                 }
             )
         )
@@ -462,7 +462,7 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:profile_unfollow',
                 kwargs={
-                    'username':self.user_new_author.username
+                    'username': self.user_new_author.username
                 }
             )
         )
@@ -472,16 +472,16 @@ class PostPagesTests(TestCase):
             'Отписка не удалась'
         )
 
-    # Тестирование наличия записи у кого нужно 
+    # Тестирование наличия записи у кого нужно
     # и отсутсвие у кого не нужно
     def test_create_post_in_follower_and_not_unfol(self):
-        """Проверяем создается ли запись у подписчика и 
+        """Проверяем создается ли запись у подписчика и
         отсутвует у неподписчика."""
         self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={
-                    'username':self.user_new_author.username
+                    'username': self.user_new_author.username
                 }
             )
         )
@@ -507,7 +507,7 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:profile_follow',
                 kwargs={
-                    'username':self.user_author.username
+                    'username': self.user_author.username
                 }
             )
         )
