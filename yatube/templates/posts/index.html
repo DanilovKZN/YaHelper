@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} ЯПомощник {% endblock title %}
+{% load cache %}
+{% block content %}
+{% include 'includes/switcher.html' with index=True follow=True %}
+<div class="container py-5">
+    <h1>Наша цель помогать развиваться товарищам </h1>
+    <h3>Последние обновления на сайте</h3>
+    <p></p>
+    {% cache 20 index_page page_obj %}
+    {% for post in page_obj %}
+        <article>
+            <ul>
+                <li>
+                    {% if post.author.get_full_name %}
+                    <p> Автор: <b><a href=" {% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name }}</a></b></p>
+                    <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username %}">{{ post.author.get_full_name }}</a></b></p>-->
+                    {% else %}
+                    <p> Автор: <b><a href=" {% url 'posts:profile' post.author.username  %}">{{ post.author.username }}</a></b></p>
+                    <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username  %}">{{ post.author.username }}</a></b></p>-->
+                    {% endif %}
+                </li>
+                <li>
+                    Дата публикации: {{ post.pub_date|date:"d E Y" }}
+                </li>
+                {% if post.group %}
+                    <li>
+                        <p>Группа:<a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a></p>
+                    </li>
+                {% endif %}
+            </ul>
+            {% load thumbnail %}
+                {% thumbnail post.image "640x480"  upscale=True as im %}
+                    <img src="{{ im.url }}">
+                {% endthumbnail %}
+            <p>
+                {{ post|linebreaksbr|truncatechars:500 }}
+                <a href="{% url 'posts:post_detail' post.pk %}">Открыть пост</a>
+            </p>
+            {% if post.group %}
+            {% endif %}
+        </article>
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+    {% endcache %}
+    {% include 'includes/paginator.html' %}
+</div>
+{% endblock content %}

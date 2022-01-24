@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %} Поиск {% endblock title %}
+{% block content %}
+<div class="container py-5">
+    {% if not page_obj %}
+        <h2>Поиск</h2>
+    {% else %}
+        <h2>Результат поиска</h2>
+    {% endif %}    
+    <div class="card-body">
+        {% load user_filters %}
+            {% include 'includes/errors_in_form.html' %}
+                <form method="POST" action="{% url 'posts:search_post' %}">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <iv class="form-group row my-3 p-3">
+                            <label for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="required text-danger">*</span>
+                                {% endif %}
+                            </label>
+                            {{ field|addclass:'form-control' }}
+                            <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                                {{ field.help_text|safe }}
+                            </small>
+                        </iv>
+                        <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            Найти
+                        </button>
+                        </div>
+                    {% endfor %} 
+                </form>
+                {% if replace_buttom %}
+                    <h4>Ничего не найдено</h4>
+                        <div class="d-flex justify-content-end">
+                            <form action="{% url 'posts:search_post' %}" method="get">
+                                <button type="submit" class="btn btn-primary">Новый поиск</button>
+                            </form>
+                        </div> 
+                {% else %}   
+                {% for post in page_obj %}
+                    <article>
+                        <ul>
+                            <li>
+                                {% if post.author.get_full_name %}
+                                    <p> Автор: <b><a href=" {% url 'posts:page_user' post.author %}">{{ post.author.get_full_name }}</a></b></p>
+                                {% else %}
+                                    <p> Автор: <b><a href=" {% url 'posts:page_user' post.author %}">{{ post.author.username }}</a></b></p>
+                                {% endif %}
+                            </li>
+                            <li>
+                                Дата публикации: {{ post.pub_date|date:"d E Y" }}
+                            </li>
+                            {% if post.group %}
+                                <li>
+                                    <p>Группа:<a href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a></p>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        {% load thumbnail %}
+                            {% thumbnail post.image "640x480"  upscale=True as im %}
+                                <img src="{{ im.url }}">
+                            {% endthumbnail %}
+                        <p>
+                            {{ post|linebreaksbr|truncatechars:500 }}
+                            <a href="{% url 'posts:post_detail' post.pk %}">Открыть пост</a>
+                        </p>
+                        {% if post.group %}
+                        {% endif %}
+                    </article>
+                    {% if not forloop.last %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+                {% include 'includes/paginator.html' %}
+                {% endif %}    
+    </div>
+{% endblock content %}

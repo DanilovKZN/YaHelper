@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Сервер не доступен{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 p-5">
+            <div class="card">
+                <div class="card-header">
+                    У всех бывают проблемы, вот и у нашего сервера в данный момент непредвиденные проблемы. :( <br>
+                    Дальше пути нет, придется вернуться на главную страницу...
+                    Ну или можно почитать новости в КОДе :)
+                </div>
+                    <div class="btn-group col-6 mx-auto" role="group" aria-label="Basic outlined example">
+                        <form action="{% url 'posts:index' %}" method="get">
+                            <button type="submit" class="btn btn-primary">Главная страница</button>
+                        </form>
+                        <form action="https://thecode.media/news/" method="get">
+                            <button type="submit" class="btn btn-primary">Почитать новости</button>
+                        </form>
+                    </div> 
+            </div>
+        </div>
+    </div>
+{% endblock %}
