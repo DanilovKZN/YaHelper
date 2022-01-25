@@ -1,11 +1,9 @@
-from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
-# from django.views.decorators.cache import cache_page
 
-from .forms import PostForm, CommentForm, InfoUserForm, SearchPostForm
-from .models import Comment, Follow, Group, Post, InfoUser, User
-
+from .forms import CommentForm, InfoUserForm, PostForm, SearchPostForm
+from .models import Comment, Follow, Group, InfoUser, Post, User
 
 POSTS_IN_PAGE_FOR_PAGINATOR = 10
 
@@ -46,15 +44,15 @@ def profile(request, username):
     post_list = Post.objects.filter(author=author)
     page_object = paginator(request, post_list)
     posts_count = post_list.count()
-    following = False
+    subscribe_button = False
     if request.user != author:
-        following = True
+        subscribe_button = True
     context = {
         'author': author,
         'posts_count': posts_count,
         'page_obj': page_object,
         'post_list': post_list,
-        'following': following,
+        'following': subscribe_button,
     }
     return render(request, template, context)
 

@@ -95,9 +95,16 @@ class Follow(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'author'],
-                name='ban on signing'
+                name='uning_fields'
+            ),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name='prevent_follows'
             )
         ]
+
+    def __str__(self) -> str:
+        return self.author.username
 
 
 class InfoUser(models.Model):

@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
-
-from ..models import Post, Group
-
 from http import HTTPStatus
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.test import Client, TestCase
+
+from ..models import Group, Post
 
 User = get_user_model()
 

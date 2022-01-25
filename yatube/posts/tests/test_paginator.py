@@ -1,11 +1,10 @@
-from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.contrib.auth.models import User
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..models import Post, Group
+from ..models import Group, Post
 from ..views import POSTS_IN_PAGE_FOR_PAGINATOR
-
 
 User = get_user_model()
 

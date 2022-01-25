@@ -81,7 +81,7 @@
                     <!--{% thumbnail comment.image "100x100"  upscale=True as im %}
                     <img src="{{ im.url }}">
                 {% endthumbnail %} <br>-->
-                    {{ comment.text }}
+                    {{ comment.text|linebreaksbr }}
                     {% if text.author == request.user or comment.author == request.user %}
                         <form method="post" action="{% url 'posts:delete_comment' text.pk comment.pk %}">
                             {% csrf_token %}

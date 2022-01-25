@@ -16,7 +16,7 @@
         <h1>Все посты пользователя <b>{{ author.username }}</b></h1>
     {% endif %}
     <h3>Всего постов: <b>{{ posts_count }}</b></h3>
-    {% if author != request.user%}
+    {% if author != request.user %}
     {% if following %}
         <a
             class="btn btn-lg btn-danger btn-sm"
@@ -63,7 +63,7 @@
         {% endif %}
         {% if not forloop.last %}
             <hr>
-       {% endif %}
+        {% endif %}
     {% endfor %}
     {% include 'includes/paginator.html' %}
 </div>

@@ -1,13 +1,12 @@
-from django.contrib.auth.models import User
+from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.core.cache import caches
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django import forms
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..models import Post, Group, Comment, Follow
-
+from ..models import Comment, Follow, Group, Post
 
 User = get_user_model()
 
@@ -346,33 +345,31 @@ class PostPagesTests(TestCase):
     def test_create_comment(self):
         """Проверяем, появился ли на странице
         созданный комментарий."""
-        urls_for_testing = [
+        response = self.authorized_client.get(
             reverse(
                 'posts:post_detail',
-                kwargs={'post_id': self.post.pk})
-        ]
-        for url in urls_for_testing:
-            response = self.authorized_client.get(url)
-            if len(response.context['comments']) > 0:
-                comment = response.context['comments'][0]
-                self.assertEqual(
-                    comment.text,
-                    self.comment.text,
-                    f'{comment.text} не сoвпадает c '
-                    f'{self.comment.text}'
-                )
-                self.assertEqual(
-                    comment.post,
-                    self.comment.post,
-                    f'{comment.post} не сoвпадает c '
-                    f'{self.comment.post}'
-                )
-                self.assertEqual(
-                    comment.author,
-                    self.comment.author,
-                    f'{comment.author} не сoвпадает c '
-                    f'{self.comment.author}'
-                )
+                kwargs={'post_id': self.post.pk}
+            )
+        )
+        comment = response.context['comments'][0]
+        self.assertEqual(
+            comment.text,
+            self.comment.text,
+            f'{comment.text} не сoвпадает c '
+            f'{self.comment.text}'
+        )
+        self.assertEqual(
+            comment.post,
+            self.comment.post,
+            f'{comment.post} не сoвпадает c '
+            f'{self.comment.post}'
+        )
+        self.assertEqual(
+            comment.author,
+            self.comment.author,
+            f'{comment.author} не сoвпадает c '
+            f'{self.comment.author}'
+        )
         #  Колличество комментариев = 1
         self.assertEqual(
             len(response.context['comments']),
@@ -434,10 +431,19 @@ class PostPagesTests(TestCase):
         )
 
     # Тестирование подписки/отписки
-    def test_follow_and_unfollow(self):
+    def test_follow_to_user(self):
         """Проверяем работоспособность подписки
-        и отписки авторизированного пользователя."""
-        # Подписка
+        авторизированного пользователя на
+        другого пользователя."""
+        follower = Follow.objects.filter(
+            user=self.user_author,
+            author=self.user_new_author
+        ).exists()
+        self.assertEqual(
+            follower,
+            False,
+            'Уже подписаны'
+        )
         self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
@@ -455,8 +461,14 @@ class PostPagesTests(TestCase):
             True,
             'Подписка не удалась'
         )
-
-        # Отписка
+    def test_unfollow_from_user(self):
+        """Проверяем работоспособность отписки
+        авторизированного пользователя от
+        другого пользователя."""
+        Follow.objects.get_or_create(
+            user=self.user_author,
+            author=self.user_new_author
+        )
         follows_count = Follow.objects.count()
         self.authorized_client.get(
             reverse(
@@ -472,18 +484,14 @@ class PostPagesTests(TestCase):
             'Отписка не удалась'
         )
 
+
     # Тестирование наличия записи у кого нужно
-    # и отсутсвие у кого не нужно
-    def test_create_post_in_follower_and_not_unfol(self):
-        """Проверяем создается ли запись у подписчика и
-        отсутвует у неподписчика."""
-        self.authorized_client.get(
-            reverse(
-                'posts:profile_follow',
-                kwargs={
-                    'username': self.user_new_author.username
-                }
-            )
+    
+    def test_post_create_in_follower(self):
+        """Проверяем создается ли запись у подписчика."""
+        Follow.objects.get_or_create(
+            user=self.user_author,
+            author=self.user_new_author
         )
         new_post = Post.objects.create(
             text='Hello world!',
@@ -502,16 +510,25 @@ class PostPagesTests(TestCase):
             f'{object.text} не сoвпадает c '
             f'{new_post.text}'
         )
-        # Отсутствует у неподписчика
-        self.test_authorized_user.get(
-            reverse(
-                'posts:profile_follow',
-                kwargs={
-                    'username': self.user_author.username
-                }
-            )
+
+    # и отсутсвие у кого не нужно
+    def test_post_not_create_in_unfollower(self):
+        """Проверяем несоздается ли запись у неподписчика."""
+        Follow.objects.get_or_create(
+            user=self.user_author,
+            author=self.test_user
         )
-        response = self.test_authorized_user.get(
+        new_post = Post.objects.create(
+            text='Hello world!',
+            group=self.group_second,
+            author=self.user_new_author
+        )
+        Post.objects.create(
+            text='For test followers',
+            author=self.test_user,
+            group=self.group
+        )
+        response = self.authorized_client.get(
             reverse(
                 'posts:follow_index'
             )
