@@ -430,7 +430,7 @@ class PostPagesTests(TestCase):
             'Контент страницы не изменился.'
         )
 
-    # Тестирование подписки/отписки
+    # Тестирование подписки
     def test_follow_to_user(self):
         """Проверяем работоспособность подписки
         авторизированного пользователя на
@@ -461,6 +461,8 @@ class PostPagesTests(TestCase):
             True,
             'Подписка не удалась'
         )
+
+    # Тестирование отписки
     def test_unfollow_from_user(self):
         """Проверяем работоспособность отписки
         авторизированного пользователя от
@@ -484,9 +486,7 @@ class PostPagesTests(TestCase):
             'Отписка не удалась'
         )
 
-
     # Тестирование наличия записи у кого нужно
-    
     def test_post_create_in_follower(self):
         """Проверяем создается ли запись у подписчика."""
         Follow.objects.get_or_create(
