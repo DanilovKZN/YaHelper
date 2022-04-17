@@ -1,0 +1,16 @@
+.big_title {
+    padding: 0; 
+    margin-left: 20px
+}
+
+.back_buttom {
+    padding: 0;
+    margin-left: 20px
+}
+
+.button_return {
+    position: absolute; 
+    top: 180px; 
+    left: 280px;
+    font-weight:bold;
+}

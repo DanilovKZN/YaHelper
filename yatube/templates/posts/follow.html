@@ -12,9 +12,9 @@
             <ul>
                 <li>
                     {% if post.author.get_full_name %}
-                        <p> Автор: <b><a href=" {% url 'posts:profile' post.author %}">{{ post.author.get_full_name }}</a></b></p>
+                        <p> Автор: <b><a href=" {% url 'posts:profile' post.author %}">@{{ post.author.get_full_name }}</a></b></p>
                     {% else %}
-                        <p> Автор: <b><a href=" {% url 'posts:profile' post.author %}">{{ post.author.username }}</a></b></p>
+                        <p> Автор: <b><a href=" {% url 'posts:profile' post.author %}">@{{ post.author.username }}</a></b></p>
                     {% endif %}
                 </li>
                 <li>

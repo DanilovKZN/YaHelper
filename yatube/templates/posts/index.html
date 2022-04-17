@@ -4,20 +4,23 @@
 {% load cache %}
 {% block content %}
 {% include 'includes/switcher.html' with index=True follow=True %}
-<div class="container py-5">
+<!--<div class="container py-5">-->
+<div class="container py-5"> 
     <h1>Наша цель помогать развиваться товарищам </h1>
     <h3>Последние обновления на сайте</h3>
-    <p></p>
+    <br>
+    <br>
     {% cache 20 index_page page_obj %}
     {% for post in page_obj %}
+    <div class="border border-top-0 border-bottom-0">
         <article>
-            <ul>
+            <ul class="index-ul">
                 <li>
                     {% if post.author.get_full_name %}
-                    <p> Автор: <b><a href=" {% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name }}</a></b></p>
+                    <p> <b><a href=" {% url 'posts:profile' post.author.username %}">@{{ post.author.get_full_name }}</a></b></p>
                     <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username %}">{{ post.author.get_full_name }}</a></b></p>-->
                     {% else %}
-                    <p> Автор: <b><a href=" {% url 'posts:profile' post.author.username  %}">{{ post.author.username }}</a></b></p>
+                    <p> <b><a href=" {% url 'posts:profile' post.author.username  %}">@{{ post.author.username }}</a></b></p>
                     <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username  %}">{{ post.author.username }}</a></b></p>-->
                     {% endif %}
                 </li>
@@ -34,7 +37,7 @@
                 {% thumbnail post.image "640x480"  upscale=True as im %}
                     <img src="{{ im.url }}">
                 {% endthumbnail %}
-            <p>
+            <p class="p_index">
                 {{ post|linebreaksbr|truncatechars:500 }}
                 <a href="{% url 'posts:post_detail' post.pk %}">Открыть пост</a>
             </p>
@@ -44,6 +47,7 @@
         {% if not forloop.last %}
             <hr>
         {% endif %}
+    </div>
     {% endfor %}
     {% endcache %}
     {% include 'includes/paginator.html' %}

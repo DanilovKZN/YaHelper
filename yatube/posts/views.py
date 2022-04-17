@@ -95,18 +95,19 @@ def post_edit(request, post_id):
     success_url = 'posts:post_detail'
     unsuccess_url = 'posts:profile'
     post = get_object_or_404(Post, pk=post_id)
-    if post.author == request.user:
-        form = PostForm(
-            request.POST or None,
-            files=request.FILES or None,
-            instance=post
-        )
-        if request.method == 'POST':
-            if form.is_valid():
-                form.save()
-                return redirect(success_url, post_id)
-        return render(request, template, {'form': form})
-    return redirect(unsuccess_url, post.author)
+    if post.author != request.user:
+        return redirect(unsuccess_url, post.author)
+    form = PostForm(
+        request.POST or None,
+        files=request.FILES or None,
+        instance=post
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect(success_url, post_id)
+    return render(request, template, {'form': form})
+    
 
 
 @login_required
@@ -114,10 +115,10 @@ def delete_post(request, post_id):
     success_url = 'posts:profile'
     template = 'posts/post_delete.html'
     post = get_object_or_404(Post, pk=post_id)
-    if request.method == 'POST':
-        post.delete()
-        return redirect(success_url, request.user)
     if post.author == request.user:
+        if request.method == 'POST':
+            post.delete()
+            return redirect(success_url, request.user)
         return render(request, template, {'post': post})
     else:
         return redirect(success_url, post.author)
@@ -128,6 +129,7 @@ def add_comment(request, post_id):
     success_url = 'posts:post_detail'
     template = 'posts/post_detail.html'
     post = get_object_or_404(Post, pk=post_id)
+    comments = post.comments.filter(active=True)
     form = CommentForm(
         request.POST or None,
         files=request.FILES or None
@@ -139,7 +141,14 @@ def add_comment(request, post_id):
             comment.post = post
             comment.save()
             return redirect(success_url, post_id)
-    return render(request, template, {'form': form})
+    return render(
+        request,
+        template,
+        {
+            'form': form,
+            'comments': comments,
+        }
+    )
 
 
 @login_required

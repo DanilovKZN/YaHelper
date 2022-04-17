@@ -2,35 +2,37 @@
 
 {% block title %}
 {% if post.author.get_full_name %}
-    Профайл пользователя {{ author.get_full_name }} 
+    Профайл пользователя @{{ author.get_full_name }} 
 {% else %}
-    Профайл пользователя {{ author.username}}
+    Профайл пользователя @{{ author.username}}
 {% endif %}
 {% endblock title %}
 
 {% block content %}
 <div class="container py-5">
     {% if post.author.get_full_name %}
-        <h1>Все посты пользователя <b>{{ author.get_full_name }}</b></h1>
+        <h1>Все посты пользователя <b>@{{ author.get_full_name }}</b></h1>
     {% else %}
-        <h1>Все посты пользователя <b>{{ author.username }}</b></h1>
+        <h1>Все посты пользователя <b>@{{ author.username }}</b></h1>
     {% endif %}
     <h3>Всего постов: <b>{{ posts_count }}</b></h3>
-    {% if author != request.user %}
-    {% if following %}
-        <a
-            class="btn btn-lg btn-danger btn-sm"
-            href="{% url 'posts:profile_unfollow' author.username %}" role="button">
-            Отписаться
-        </a>
-    {% else %}
-        <a
-            class="btn btn-lg btn-primary btn-sm"
-            href="{% url 'posts:profile_follow' author.username %}" role="button">
-            Подписаться
-        </a>
-    {% endif %}
-    {% endif %}
+    {% if request.user.is_authenticated %}
+        {% if request.user != author %}
+            {% if following %}
+                <a
+                    class="btn btn-lg btn-danger btn-sm"
+                    href="{% url 'posts:profile_unfollow' author.username %}" role="button">
+                        Отписаться
+                </a>
+            {% else %}
+                <a
+                    class="btn btn-lg btn-primary btn-sm"
+                    href="{% url 'posts:profile_follow' author.username %}" role="button">
+                        Подписаться
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}    
     </div>
     <div class="container py-5">
     {% for post in page_obj %}
@@ -38,11 +40,11 @@
             <ul>
                 {% if post.author.get_full_name %}
                     <li>
-                        Автор: <b>{{ post.author.get_full_name }}</b>
+                        Автор: <b>@{{ post.author.get_full_name }}</b>
                     </li>
                 {% else %}
                 <li>
-                    Автор: <b>{{ post.author.username }}</b>
+                    Автор: <b>@{{ post.author.username }}</b>
                 </li>
                 {% endif %}
                 <li>

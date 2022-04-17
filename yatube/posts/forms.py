@@ -32,8 +32,8 @@ class PostForm(ModelForm):
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        # fields = ('text', 'image') # Комментарии с картинками
-        fields = ('text',)
+        fields = ('text', 'image')
+        # fields = ('text',)
         labels = {
             'text': 'Текст',
         }

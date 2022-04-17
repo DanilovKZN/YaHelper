@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from core.models import CreatedModel
+# from taggit.managers import TaggableManager
 
 User = get_user_model()
 
@@ -69,14 +70,19 @@ class Comment(CreatedModel, models.Model):
         verbose_name='Комментарий',
         help_text='Наберите текст...'
     )
-    # image = models.ImageField(
-    #     'Изображение',
-    #     upload_to='comments/',
-    #     blank=True
-    # )
+    image = models.ImageField(
+        'Изображение',
+        upload_to='comments/',
+        blank=True
+    )
+    active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('created',)
 
     def __str__(self) -> str:
-        return self.text
+        return f'Comment by {self.author} on {self.post}'
 
 
 class Follow(models.Model):

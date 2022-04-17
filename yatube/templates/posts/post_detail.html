@@ -78,9 +78,9 @@
                     <small>{{ comment.pub_date }}</small>
                 </p>
                 <p>
-                    <!--{% thumbnail comment.image "100x100"  upscale=True as im %}
+                    {% thumbnail comment.image "100x100"  upscale=True as im %}
                     <img src="{{ im.url }}">
-                {% endthumbnail %} <br>-->
+                {% endthumbnail %} <br>
                     {{ comment.text|linebreaksbr }}
                     {% if text.author == request.user or comment.author == request.user %}
                         <form method="post" action="{% url 'posts:delete_comment' text.pk comment.pk %}">
@@ -93,7 +93,9 @@
                 </p>
             </div>
         </div>
-    {% endfor %}
+        {% empty %}
+        <p>Комментариев пока нет.</p>
+        {% endfor %}
 
     {% load user_filters %}
     {% if user.is_authenticated %}
@@ -104,7 +106,7 @@
                     {% csrf_token %}      
                     <div class="form-group mb-2">
                         {{ form.text|addclass:"form-control" }}
-                        <!--{{ form.image }}-->
+                        {{ form.image }}
                     </div>
                     <button type="submit" class="btn btn-primary">Отправить</button>
                 </form>

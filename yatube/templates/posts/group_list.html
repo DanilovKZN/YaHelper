@@ -11,9 +11,9 @@
             <ul>
                 <li>
                     {% if post.author.get_full_name %}
-                        Автор: <b>{{ post.author.get_full_name }}</b>
+                        Автор: <b>@{{ post.author.get_full_name }}</b>
                     {% else %}
-                        Автор:<b>{{ post.author.username }}</b>
+                        Автор:<b>@{{ post.author.username }}</b>
                     {% endif %}
                 </li>
                 <li>
