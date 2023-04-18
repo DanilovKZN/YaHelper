@@ -14,11 +14,21 @@
         <h1>Все посты пользователя <b>@{{ author.get_full_name }}</b></h1>
     {% else %}
         <h1>Все посты пользователя <b>@{{ author.username }}</b></h1>
+        
     {% endif %}
-    <h3>Всего постов: <b>{{ posts_count }}</b></h3>
+    <h3>Всего постов: <b>{{ posts_count }}</b></h3>   <!-- -->
+    {% load thumbnail %}
+    {% thumbnail author.infouser.image "100x100"  upscale=True as im %}
+        <img src="{{ im.url }}">
+    {% endthumbnail %}
+    <ul>
+        
+        <li>{{author.infouser.first_name}}</li>
+    </ul>    
+
     {% if request.user.is_authenticated %}
         {% if request.user != author %}
-            {% if following %}
+            {% if author.username in following %}
                 <a
                     class="btn btn-lg btn-danger btn-sm"
                     href="{% url 'posts:profile_unfollow' author.username %}" role="button">

@@ -21,6 +21,3 @@ class GroupAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('post', 'author', 'created', 'active')
     list_filter = ('active', 'created')
-
-# admin.site.register(Post, PostAdmin)
-# admin.site.register(Group, GroupAdmin)

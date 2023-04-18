@@ -39,20 +39,21 @@ def group_posts(request, slug):
 
 
 def profile(request, username):
+    names = []
     author = get_object_or_404(User, username=username)
+    following = request.user.follower.all()
+    for name in following:
+        names.append(name.author.username)
     template = 'posts/profile.html'
     post_list = Post.objects.filter(author=author)
     page_object = paginator(request, post_list)
     posts_count = post_list.count()
-    subscribe_button = False
-    if request.user != author:
-        subscribe_button = True
     context = {
         'author': author,
         'posts_count': posts_count,
         'page_obj': page_object,
         'post_list': post_list,
-        'following': subscribe_button,
+        'following': names,
     }
     return render(request, template, context)
 
@@ -202,7 +203,6 @@ def profile_unfollow(request, username):
     return redirect('posts:profile', username)
 
 
-# Ремонтировать. Почему-то пересылает на профиль????
 def info_user(request, username):
     template = 'posts/personal_page.html'
     user_pr = get_object_or_404(User, username=username)
@@ -213,12 +213,11 @@ def info_user(request, username):
     return render(request, template, context)
 
 
-# Ремонтировать
 @login_required
 def edit_info_user(request, username):
     template = 'posts/personal_page_edit.html'
-    success_url = 'posts:page_user_edit'
-    unsuccess_url = 'posts:page_user'
+    success_url = 'posts:index'
+    unsuccess_url = 'posts:index'
     user_pr = get_object_or_404(User, username=username)
     if user_pr == request.user:
         form = InfoUserForm(
@@ -234,7 +233,6 @@ def edit_info_user(request, username):
     return redirect(unsuccess_url, username)
 
 
-# Ремонтировать
 def search_post_info(request):
     template = 'posts/search_post.html'
     form = SearchPostForm(request.POST or None)

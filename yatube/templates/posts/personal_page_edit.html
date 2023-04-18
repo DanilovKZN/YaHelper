@@ -13,7 +13,7 @@
                 <div class="card-body">
                     {% load user_filters %}
                         {% include 'includes/errors_in_form.html' %}
-                            <form method="post" action="{% url 'posts:page_user_edit' request.user  %}" enctype="multipart/form-data">
+                            <form method="post" action="" enctype="multipart/form-data">
                         {% csrf_token %}
                             {% for field in form %}
                                 <iv class="form-group row my-3 p-3">
