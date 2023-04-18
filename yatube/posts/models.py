@@ -50,7 +50,6 @@ class Post(CreatedModel, models.Model):
 
     def __str__(self) -> str:
         return self.text
-        # return self.text[:15]
 
 
 class Comment(CreatedModel, models.Model):

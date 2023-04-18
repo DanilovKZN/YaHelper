@@ -4,7 +4,6 @@
 {% load cache %}
 {% block content %}
 {% include 'includes/switcher.html' with index=True follow=True %}
-<!--<div class="container py-5">-->
 <div class="container py-5"> 
     <h1>Наша цель помогать развиваться товарищам </h1>
     <h3>Последние обновления на сайте</h3>
@@ -18,10 +17,10 @@
                 <li>
                     {% if post.author.get_full_name %}
                     <p> <b><a href=" {% url 'posts:profile' post.author.username %}">@{{ post.author.get_full_name }}</a></b></p>
-                    <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username %}">{{ post.author.get_full_name }}</a></b></p>-->
+
                     {% else %}
                     <p> <b><a href=" {% url 'posts:profile' post.author.username  %}">@{{ post.author.username }}</a></b></p>
-                    <!--<p> Автор: <b><a href=" {% url 'posts:page_user' post.author.username  %}">{{ post.author.username }}</a></b></p>-->
+
                     {% endif %}
                 </li>
                 <li>

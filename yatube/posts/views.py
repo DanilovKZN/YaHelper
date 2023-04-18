@@ -9,6 +9,7 @@ POSTS_IN_PAGE_FOR_PAGINATOR = 10
 
 
 def paginator(request, post_list):
+    """Пагинатор."""
     paginator = Paginator(post_list, POSTS_IN_PAGE_FOR_PAGINATOR)
     page_number = request.GET.get('page', 1)
     page_object = paginator.get_page(page_number)
@@ -16,6 +17,7 @@ def paginator(request, post_list):
 
 
 def index(request):
+    """Главная страница."""
     template = 'posts/index.html'
     post_list = Post.objects.all()
     page_object = paginator(request, post_list)
@@ -26,6 +28,7 @@ def index(request):
 
 
 def group_posts(request, slug):
+    """Посты группы."""
     template = 'posts/group_list.html'
     groups = get_object_or_404(Group, slug=slug)
     post_list = groups.posts.all()
@@ -39,6 +42,7 @@ def group_posts(request, slug):
 
 
 def profile(request, username):
+    """Личная страница."""
     names = []
     author = get_object_or_404(User, username=username)
     following = request.user.follower.all()
@@ -59,6 +63,7 @@ def profile(request, username):
 
 
 def post_detail(request, post_id):
+    """Страница поста."""
     text = get_object_or_404(Post, pk=post_id)
     form_com = CommentForm(request.POST or None)
     comments = text.comments.all()
@@ -77,6 +82,7 @@ def post_detail(request, post_id):
 
 @login_required
 def create_post(request):
+    """Создаем пост."""
     template = 'posts/create_post.html'
     success_url = 'posts:profile'
     form = PostForm(request.POST or None,
@@ -92,6 +98,7 @@ def create_post(request):
 
 @login_required
 def post_edit(request, post_id):
+    """Редактируем пост."""
     template = 'posts/create_post.html'
     success_url = 'posts:post_detail'
     unsuccess_url = 'posts:profile'
@@ -113,6 +120,7 @@ def post_edit(request, post_id):
 
 @login_required
 def delete_post(request, post_id):
+    """Удаляем пост."""
     success_url = 'posts:profile'
     template = 'posts/post_delete.html'
     post = get_object_or_404(Post, pk=post_id)
@@ -127,6 +135,7 @@ def delete_post(request, post_id):
 
 @login_required
 def add_comment(request, post_id):
+    """Добавляем комментарий к посту."""
     success_url = 'posts:post_detail'
     template = 'posts/post_detail.html'
     post = get_object_or_404(Post, pk=post_id)
@@ -154,6 +163,7 @@ def add_comment(request, post_id):
 
 @login_required
 def delete_comment(request, post_id, com_id):
+    """Удаляем комментарий поста."""
     success_url = 'posts:post_detail'
     post = get_object_or_404(Post, pk=post_id)
     comment = get_object_or_404(Comment, pk=com_id)
@@ -167,6 +177,7 @@ def delete_comment(request, post_id, com_id):
 
 @login_required
 def follow_index(request):
+    """Посты пользователей, на которых мы подписаны."""
     posts = Post.objects.filter(
         author__following__user=request.user
     )
@@ -179,6 +190,7 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
+    """Подписываемся на пользователя."""
     post_author = get_object_or_404(
         User,
         username=username
@@ -193,6 +205,7 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
+    """Отписываемся от пользователя."""
     good_bay_man = get_object_or_404(
         Follow.objects.filter(
             user=request.user,
@@ -204,6 +217,7 @@ def profile_unfollow(request, username):
 
 
 def info_user(request, username):
+    """Информация о пользователе."""
     template = 'posts/personal_page.html'
     user_pr = get_object_or_404(User, username=username)
     information = InfoUser.objects.filter(user=user_pr)
@@ -215,6 +229,7 @@ def info_user(request, username):
 
 @login_required
 def edit_info_user(request, username):
+    """Редактирование информации о полдьзователе."""
     template = 'posts/personal_page_edit.html'
     success_url = 'posts:index'
     unsuccess_url = 'posts:index'
@@ -234,6 +249,7 @@ def edit_info_user(request, username):
 
 
 def search_post_info(request):
+    """Ищем пост."""
     template = 'posts/search_post.html'
     form = SearchPostForm(request.POST or None)
     replace_buttom = False

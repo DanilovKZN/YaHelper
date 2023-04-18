@@ -29,11 +29,6 @@
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Когорта: <b>{{ information.kogorta }}</b>
             </li>
-            <!--<li class="list-group-item">
-                <a href="{% url 'posts:profile' information.user %}">
-                    Все посты пользователя
-                </a>
-            </li>-->
             {% if information.user == request.user %}
                 <li class="list-group-item">
                     <a href="{% url 'posts:page_user_edit' request.user %}">
